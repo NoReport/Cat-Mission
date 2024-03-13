@@ -7,7 +7,8 @@ from random import randint
 
 
 class Cat(Widget):
-    health = NumericProperty(100)
+    def __init__(self, **kwrag):
+        health = NumericProperty(100)
 
     def move(self):
         self.pos = Vector(*self.velocity) + self.pos    
@@ -63,3 +64,4 @@ class CatApp(App):
 
 if __name__ == "__main__":
     CatApp().run()
+
