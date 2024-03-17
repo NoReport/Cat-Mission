@@ -84,7 +84,6 @@ class CatQuest(Widget):
         self.cat.canvas.source = "./src/sprites/charactorSprite/test.png"
         self.enemy.pos = (Vector(self.cat.pos)+Vector(randint(500, 800), randint(500,800)))
         self.enemy.canvas.pos = self.enemy.pos
-        
 
     def _on_keyboard_closed(self):
         self._keyboard.unbind(on_key_down = self._on_keyboard_down)
@@ -135,8 +134,13 @@ class CatQuest(Widget):
 
     def playerAttack(self, trickSpeed):
         if "left" in self.mousePressed:
-            print("attacked")
-
+            if (self.enemy.pos[1] > self.cat.pos[1]-100) and (self.enemy.pos[1] < self.cat.pos[1]+100):
+                if self.cat.direct == 0:
+                    if (self.enemy.pos[0] > self.cat.pos[0]+10) and (self.enemy.pos[0] < self.cat.pos[0]+200):
+                        self.enemy.health -= 10
+                else:
+                    if (self.enemy.pos[0] < self.cat.pos[0]-10) and (self.enemy.pos[0] > self.cat.pos[0]-200):
+                        self.enemy.health -= 10
 
 class CatApp(App):
     def build(self):
