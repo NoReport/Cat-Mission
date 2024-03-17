@@ -55,9 +55,9 @@ class CatQuest(Widget):
             self.cat.y = 0
 
         if self.enemy.right > self.width or self.enemy.x < 0:
-            self.enemy.velocity_x *= -1
+            self.enemy.velocity.x *= -1
         if self.enemy.top > self.height or self.enemy.y < 0:
-            self.enemy.velocity_y *= -1
+            self.enemy.velocity.y *= -1 
 
     def reset_game(self):
         self.cat.health = 100
