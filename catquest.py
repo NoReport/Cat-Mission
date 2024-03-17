@@ -5,10 +5,12 @@ from kivy.vector import Vector
 from kivy.clock import Clock
 from random import randint
 from kivy.graphics import Rectangle
+from kivy.core.window import Window
 
 
 class Cat(Widget):
     health = NumericProperty(100)
+    speed = 180
     def move(self):
         self.pos = Vector(*self.velocity) + self.pos    
 
@@ -26,6 +28,11 @@ class CatQuest(Widget):
 
     def __init__(self, **kwargs):
         super(CatQuest, self).__init__(**kwargs)
+        Clock.schedule_interval(self.playerMove,0)
+        self._keyboard = Window.request_keyboard(self._on_keyboard_closed, self)
+        self._keyboard.bind(on_key_down = self._on_keyboard_down)
+        self._keyboard.bind(on_key_up = self._on_keyboard_up)
+        self.keysPressed = set()
         self.cat = Cat()
         self.enemy = Enemy()
         self.cat.pos = self.width / 2 - 25, self.height / 2 - 25
@@ -34,7 +41,10 @@ class CatQuest(Widget):
         self.enemy.velocity = Vector(4, 4)
         Clock.schedule_interval(self.update, 1.0 / 60.0)
         with self.canvas:
-            Rectangle(source=("./src/sprites/charactorSprite/test.png"), pos=(Vector(self.cat.velocity)), size=(self.cat.width, self.cat.height))
+            self.cat.canvas = Rectangle(source=("./src/sprites/charactorSprite/test.png"), pos=(Vector(self.cat.velocity)), size=(self.cat.width, self.cat.height))
+
+
+
 
     def update(self, dt):
         self.cat.move()
@@ -66,9 +76,38 @@ class CatQuest(Widget):
         self.cat.pos = self.width / 2 - 25, self.height / 2 - 25
         self.enemy.pos = randint(0, self.width - 50), randint(0, self.height - 50)
 
+    def _on_keyboard_closed(self):
+        self._keyboard.unbind(on_key_down = self._on_keyboard_down)
+        self._keyboard.unbind(on_key_up = self._on_keyboard_up)
+        self._keyboard = None
+    
+    def _on_keyboard_down(self, keyboard, keycode, text, modifiers):
+        self.keysPressed.add(text)
+        
+
+    
+    def _on_keyboard_up(self, keyboard, keycode):
+        text = keycode[1]
+        if text in self.keysPressed:
+            self.keysPressed.remove(text)
+            pass
+
     def on_touch_move(self, touch):
         self.cat.velocity = Vector(touch.x - self.cat.center_x, touch.y - self.cat.center_y)
 
+    def playerMove(self, trickSpeed):
+        newPosX = self.cat.canvas.pos[0]
+        newPosY = self.cat.canvas.pos[1]
+        step_size = self.cat.speed * trickSpeed
+        if "w" in self.keysPressed:
+            newPosY += step_size
+        if "s" in self.keysPressed:
+            newPosY -= step_size
+        if "a" in self.keysPressed:
+            newPosX -= step_size
+        if "d" in self.keysPressed:
+            newPosX += step_size
+        self.cat.canvas.pos = (newPosX, newPosY)
 
 
 class CatApp(App):
