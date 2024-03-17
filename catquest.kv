@@ -1,4 +1,4 @@
-#:kivy
+#:kivy 1.0.9
 <Cat>:
     size: 50, 50
     canvas:
@@ -25,3 +25,12 @@
         id: cat
     Enemy:
         id: enemy
+
+    canvas.after:
+        Color:
+            rgba: 1, 1, 1, 1
+        Rectangle:
+            pos: self.cat.pos[0] + self.cat.width, self.cat.pos[1]
+            size: 10, self.height
+
+
