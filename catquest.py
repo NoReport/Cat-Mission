@@ -36,7 +36,7 @@ class CatQuest(Widget):
         self.cat = Cat()
         self.enemy = Enemy()
         self.cat.pos = self.width / 2 - 25, self.height / 2 - 25
-        self.enemy.pos = randint(0, self.width - 50), randint(0, self.height - 50)
+        self.enemy.pos = (Vector(self.cat.pos)+Vector(randint(500, 1000), randint(500,1000)))
         self.cat.velocity = Vector(0, 0)
         self.enemy.velocity = Vector(4, 4)
         Clock.schedule_interval(self.update, 1.0 / 60.0)
@@ -73,7 +73,7 @@ class CatQuest(Widget):
 
     def reset_game(self):
         self.cat.health = 100
-        self.cat.pos = self.width / 2 - 25, self.height / 2 - 25
+        self.cat.pos = (Vector(self.cat.pos)+Vector(randint(500, 1000), randint(500,1000)))
         self.enemy.pos = randint(0, self.width - 50), randint(0, self.height - 50)
 
     def _on_keyboard_closed(self):
