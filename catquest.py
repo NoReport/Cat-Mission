@@ -4,11 +4,11 @@ from kivy.properties import NumericProperty, ObjectProperty
 from kivy.vector import Vector
 from kivy.clock import Clock
 from random import randint
+from kivy.graphics import Rectangle
 
 
 class Cat(Widget):
     health = NumericProperty(100)
-
     def move(self):
         self.pos = Vector(*self.velocity) + self.pos    
 
@@ -33,6 +33,8 @@ class CatQuest(Widget):
         self.cat.velocity = Vector(0, 0)
         self.enemy.velocity = Vector(4, 4)
         Clock.schedule_interval(self.update, 1.0 / 60.0)
+        with self.canvas:
+            Rectangle(pos=(Vector(self.cat.velocity)), size=(100,100))
 
     def update(self, dt):
         self.cat.move()
@@ -66,6 +68,7 @@ class CatQuest(Widget):
 
     def on_touch_move(self, touch):
         self.cat.velocity = Vector(touch.x - self.cat.center_x, touch.y - self.cat.center_y)
+
 
 
 class CatApp(App):
