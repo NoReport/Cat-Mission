@@ -32,10 +32,12 @@ class CatQuest(Widget):
     def __init__(self, **kwargs):
         super(CatQuest, self).__init__(**kwargs)
         Clock.schedule_interval(self.playerMove,0)
+        Clock.schedule_interval(self.playerAttack, 0.5)
         self._keyboard = Window.request_keyboard(self._on_keyboard_closed, self)
         self._keyboard.bind(on_key_down = self._on_keyboard_down)
         self._keyboard.bind(on_key_up = self._on_keyboard_up)
         self.keysPressed = set()
+        self.mousePressed = set()
         self.cat = Cat()
         self.enemy = Enemy()
         self.cat.pos = self.width / 2 - 25, self.height / 2 - 25
@@ -92,13 +94,20 @@ class CatQuest(Widget):
     def _on_keyboard_down(self, keyboard, keycode, text, modifiers):
         self.keysPressed.add(text)
         
-
     
     def _on_keyboard_up(self, keyboard, keycode):
         text = keycode[1]
         if text in self.keysPressed:
             self.keysPressed.remove(text)
-            pass
+            
+    
+    def on_touch_down(self, touch):
+        self.mousePressed.add(touch.button)
+    
+    def on_touch_up(self, touch):
+        button = touch.button
+        if button in self.mousePressed:
+            self.mousePressed.remove(button)
 
     def on_touch_move(self, touch):
         self.cat.velocity = Vector(touch.x - self.cat.center_x, touch.y - self.cat.center_y)
@@ -123,6 +132,10 @@ class CatQuest(Widget):
             newPosX += step_size
         self.cat.pos = (newPosX, newPosY)
         self.cat.canvas.pos = self.cat.pos
+
+    def playerAttack(self, trickSpeed):
+        if "left" in self.mousePressed:
+            print("attacked")
 
 
 class CatApp(App):
