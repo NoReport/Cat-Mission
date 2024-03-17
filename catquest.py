@@ -6,6 +6,7 @@ from kivy.clock import Clock
 from random import randint
 from kivy.graphics import Rectangle
 from kivy.core.window import Window
+import time
 
 
 class Cat(Widget):
@@ -36,10 +37,10 @@ class CatQuest(Widget):
         self.cat = Cat()
         self.enemy = Enemy()
         self.cat.pos = self.width / 2 - 25, self.height / 2 - 25
-        self.enemy.pos = (Vector(self.cat.pos)+Vector(randint(500, 1000), randint(500,1000)))
+        self.enemy.pos = (Vector(self.cat.pos)+Vector(randint(500, 800), randint(500,800)))
         self.cat.velocity = Vector(0, 0)
         self.enemy.velocity = Vector(4, 4)
-        Clock.schedule_interval(self.update, 1.0 / 60.0)
+        Clock.schedule_interval(self.update, 1)
         with self.canvas:
             self.cat.canvas = Rectangle(source=("./src/sprites/charactorSprite/test.png"), pos=(self.cat.pos), size=(self.cat.width, self.cat.height))
             self.enemy.canvas = Rectangle(pos=(self.enemy.pos), size=(self.enemy.width, self.enemy.height), )
@@ -52,10 +53,11 @@ class CatQuest(Widget):
 
         if self.cat.collide_widget(self.enemy):
             self.cat.health -= 10
+            print("you got damage")
+            if self.cat.health <= 0:
+                print("You have been defeated by the enemy!")
+                self.reset_game()
 
-        if self.cat.health <= 0:
-            print("You have been defeated by the enemy!")
-            self.reset_game()
 
         if self.cat.right > self.width:
             self.cat.right = self.width
@@ -73,8 +75,11 @@ class CatQuest(Widget):
 
     def reset_game(self):
         self.cat.health = 100
-        self.cat.pos = (Vector(self.cat.pos)+Vector(randint(500, 1000), randint(500,1000)))
-        self.enemy.pos = randint(0, self.width - 50), randint(0, self.height - 50)
+        self.cat.pos = 0,0
+        self.cat.canvas.pos = self.cat.pos
+        self.enemy.pos = (Vector(self.cat.pos)+Vector(randint(500, 800), randint(500,800)))
+        self.enemy.canvas.pos = self.enemy.pos
+        
 
     def _on_keyboard_closed(self):
         self._keyboard.unbind(on_key_down = self._on_keyboard_down)
