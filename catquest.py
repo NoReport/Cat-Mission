@@ -107,7 +107,8 @@ class CatQuest(Widget):
             newPosX -= step_size
         if "d" in self.keysPressed:
             newPosX += step_size
-        self.cat.canvas.pos = (newPosX, newPosY)
+        self.cat.velocity = (newPosX, newPosY)
+        self.cat.canvas.pos = self.cat.velocity
 
 
 class CatApp(App):
