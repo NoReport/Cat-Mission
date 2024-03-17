@@ -44,7 +44,7 @@ class CatQuest(Widget):
         Clock.schedule_interval(self.update, 1)
         with self.canvas:
             self.cat.canvas = Rectangle(source=("./src/sprites/charactorSprite/test.png"), pos=(self.cat.pos), size=(84, 150))
-            self.enemy.canvas = Rectangle(pos=(self.enemy.pos), size=(self.enemy.width, self.enemy.height),source=("./src/sprites/charactorSprite/test.png") )
+            self.enemy.canvas = Rectangle(pos=(self.enemy.pos), size=(322, 200),source=("./src/sprites/charactorSprite/bob_sprite.png") )
 
 
 
