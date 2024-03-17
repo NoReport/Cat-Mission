@@ -27,6 +27,7 @@ class CatQuest(Widget):
     cat = ObjectProperty(None)
     enemy = ObjectProperty(None)
 
+
     def __init__(self, **kwargs):
         super(CatQuest, self).__init__(**kwargs)
         Clock.schedule_interval(self.playerMove,0)
@@ -42,8 +43,8 @@ class CatQuest(Widget):
         self.enemy.velocity = Vector(4, 4)
         Clock.schedule_interval(self.update, 1)
         with self.canvas:
-            self.cat.canvas = Rectangle(source=("./src/sprites/charactorSprite/test.png"), pos=(self.cat.pos), size=(self.cat.width, self.cat.height))
-            self.enemy.canvas = Rectangle(pos=(self.enemy.pos), size=(self.enemy.width, self.enemy.height), )
+            self.cat.canvas = Rectangle(source=("./src/sprites/charactorSprite/test.png"), pos=(self.cat.pos), size=(84, 150))
+            self.enemy.canvas = Rectangle(pos=(self.enemy.pos), size=(self.enemy.width, self.enemy.height),source=("./src/sprites/charactorSprite/test.png") )
 
 
 
