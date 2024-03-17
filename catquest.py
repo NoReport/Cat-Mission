@@ -41,8 +41,8 @@ class CatQuest(Widget):
         self.enemy.velocity = Vector(4, 4)
         Clock.schedule_interval(self.update, 1.0 / 60.0)
         with self.canvas:
-            self.cat.canvas = Rectangle(source=("./src/sprites/charactorSprite/test.png"), pos=(Vector(self.cat.velocity)), size=(self.cat.width, self.cat.height))
-
+            self.cat.canvas = Rectangle(source=("./src/sprites/charactorSprite/test.png"), pos=(self.cat.pos), size=(self.cat.width, self.cat.height))
+            self.enemy.canvas = Rectangle(pos=(self.enemy.pos), size=(self.enemy.width, self.enemy.height), )
 
 
 
@@ -107,8 +107,8 @@ class CatQuest(Widget):
             newPosX -= step_size
         if "d" in self.keysPressed:
             newPosX += step_size
-        self.cat.velocity = (newPosX, newPosY)
-        self.cat.canvas.pos = self.cat.velocity
+        self.cat.pos = (newPosX, newPosY)
+        self.cat.canvas.pos = self.cat.pos
 
 
 class CatApp(App):
