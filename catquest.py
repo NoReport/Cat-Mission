@@ -34,7 +34,7 @@ class CatQuest(Widget):
         self.enemy.velocity = Vector(4, 4)
         Clock.schedule_interval(self.update, 1.0 / 60.0)
         with self.canvas:
-            Rectangle(pos=(Vector(self.cat.velocity)), size=(100,100))
+            Rectangle(pos=(Vector(self.cat.velocity)), size=(self.cat.width, self.cat.height))
 
     def update(self, dt):
         self.cat.move()
