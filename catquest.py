@@ -10,6 +10,7 @@ import time
 
 
 class Cat(Widget):
+    direct = 0
     health = NumericProperty(100)
     speed = 180
     def move(self):
@@ -78,6 +79,7 @@ class CatQuest(Widget):
         self.cat.health = 100
         self.cat.pos = 0,0
         self.cat.canvas.pos = self.cat.pos
+        self.cat.canvas.source = "./src/sprites/charactorSprite/test.png"
         self.enemy.pos = (Vector(self.cat.pos)+Vector(randint(500, 800), randint(500,800)))
         self.enemy.canvas.pos = self.enemy.pos
         
@@ -110,8 +112,14 @@ class CatQuest(Widget):
         if "s" in self.keysPressed:
             newPosY -= step_size
         if "a" in self.keysPressed:
+            if self.cat.direct == 0:
+                self.cat.direct = 1
+                self.cat.canvas.source = "./src/sprites/charactorSprite/testLeft.png"
             newPosX -= step_size
         if "d" in self.keysPressed:
+            if self.cat.direct == 1:
+                self.cat.direct = 0
+                self.cat.canvas.source = "./src/sprites/charactorSprite/test.png"
             newPosX += step_size
         self.cat.pos = (newPosX, newPosY)
         self.cat.canvas.pos = self.cat.pos
