@@ -27,7 +27,7 @@ class Enemy(Widget):
 class CatQuest(Widget):
     cat = ObjectProperty(None)
     enemy = ObjectProperty(None)
-
+    
 
     def __init__(self, **kwargs):
         super(CatQuest, self).__init__(**kwargs)
@@ -48,7 +48,6 @@ class CatQuest(Widget):
         with self.canvas:
             self.cat.canvas = Rectangle(source=("./src/sprites/charactorSprite/test.png"), pos=(self.cat.pos), size=(84, 150))
             self.enemy.canvas = Rectangle(pos=(self.enemy.pos), size=(322, 200),source=("./src/sprites/charactorSprite/bob_sprite.png") )
-
 
 
     def update(self, dt):
@@ -117,19 +116,23 @@ class CatQuest(Widget):
         newPosY = self.cat.canvas.pos[1]
         step_size = self.cat.speed * trickSpeed
         if "w" in self.keysPressed:
-            newPosY += step_size
+            if newPosY+step_size <= 900:
+                newPosY += step_size
         if "s" in self.keysPressed:
-            newPosY -= step_size
+            if newPosY-step_size >= 0:
+                newPosY -= step_size
         if "a" in self.keysPressed:
             if self.cat.direct == 0:
                 self.cat.direct = 1
                 self.cat.canvas.source = "./src/sprites/charactorSprite/testLeft.png"
-            newPosX -= step_size
+            if newPosX-step_size >=0 :
+                newPosX -= step_size
         if "d" in self.keysPressed:
             if self.cat.direct == 1:
                 self.cat.direct = 0
                 self.cat.canvas.source = "./src/sprites/charactorSprite/test.png"
-            newPosX += step_size
+            if newPosX+step_size < 1850:
+                newPosX += step_size
         self.cat.pos = (newPosX, newPosY)
         self.cat.canvas.pos = self.cat.pos
 
