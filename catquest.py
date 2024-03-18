@@ -177,36 +177,23 @@ class CatQuest(Widget):
             
     def playerAttack(self, trickSpeed):
         if "left" in self.mousePressed:
-            # Calculate the direction vector from the cat to the mouse position
             direction = Vector(*self.mousePos) - Vector(*self.cat.pos)
-            # Normalize the direction vector to have a magnitude of 1
             direction = direction.normalize()
-            # Define the hitbox range based on the direction
-            hitbox_range = 200  # Adjust this value as needed
-            # Calculate the hitbox position relative to the cat's position
+            hitbox_range = 200
             hitbox_pos = (self.cat.pos[0] + direction.x * hitbox_range, self.cat.pos[1])
-            # Calculate the hitbox size
             hitbox_size = (abs(direction.x) * hitbox_range, self.cat.height)
-
-            # Draw the hitbox rectangle
             with self.canvas:
                 self.hitbox = Rectangle(pos=hitbox_pos, size=hitbox_size)
 
-            # Schedule the function to remove the hitbox after 1 second
             Clock.schedule_once(self.remove_hitbox, 1)
-
-            # Check if the enemy is within the hitbox range in the direction of the mouse
+            
             if self.cat.direct == 0:
-                # If the cat is facing right
                 if direction.x > 0 and abs(direction.y) < 0.2:
-                    # Check if the enemy is within the hitbox range horizontally
                     if 0 < direction.x * (self.enemy.x - self.cat.x) < hitbox_range:
                         self.enemy.health -= 10
                         print("attacked")
             else:
-                # If the cat is facing left
                 if direction.x < 0 and abs(direction.y) < 0.2:
-                    # Check if the enemy is within the hitbox range horizontally
                     if 0 > direction.x * (self.enemy.x - self.cat.x) > -hitbox_range:
                         self.enemy.health -= 10
                         print("attacked")
