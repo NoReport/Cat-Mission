@@ -13,6 +13,7 @@ class Cat(Widget):
     direct = 0
     health = NumericProperty(100)
     speed = 180
+    soundHurt = ["./src/sounds/sfx/cat/hurt/hurt1.mp3", "./src/sounds/sfx/cat/hurt/hurt2.mp3", "./src/sounds/sfx/cat/hurt/hurt3.mp3"]
     def move(self):
         self.pos = Vector(*self.velocity) + self.pos    
 
@@ -57,6 +58,9 @@ class CatQuest(Widget):
         self.enemy.move()
 
         if self.cat.collide_widget(self.enemy):
+            x = randint(0,2)
+            hurtsonud = SoundLoader.load(self.cat.soundHurt[x])
+            hurtsonud.play()
             self.cat.health -= 10
             print("you got damage")
             if self.cat.health <= 0:
