@@ -18,7 +18,7 @@ class Cat(Widget):
 
 
 class Enemy(Widget):
-    health = NumericProperty(50)
+    health = NumericProperty(100)
 
     def move(self):
         self.pos = Vector(*self.velocity) + self.pos
