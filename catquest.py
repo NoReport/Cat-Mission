@@ -179,7 +179,7 @@ class CatQuest(Widget):
         if "left" in self.mousePressed:
             direction = Vector(*self.mousePos) - Vector(*self.cat.pos)
             direction = direction.normalize()
-            hitbox_range = 150
+            hitbox_range = 200
             hitbox_pos = (self.cat.pos[0] + direction.x * hitbox_range, self.cat.pos[1])
             hitbox_size = (abs(direction.x) * hitbox_range, self.cat.height)
             with self.canvas:
