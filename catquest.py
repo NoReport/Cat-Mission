@@ -6,7 +6,7 @@ from kivy.clock import Clock
 from random import randint
 from kivy.graphics import Rectangle
 from kivy.core.window import Window
-import time
+from kivy.core.audio import SoundLoader
 
 
 class Cat(Widget):
@@ -188,6 +188,9 @@ class CatApp(App):
     def build(self):
         self.root = CatQuest()
         Clock.schedule_once(self.start_game, 2)  # Delay the game start by 2 seconds
+        bgMusic = SoundLoader.load("./src/sounds/bgSound/BADDAY_Minecraft Beat.wav")
+        if bgMusic:
+            bgMusic.play()
         return self.root
 
     def start_game(self, dt):
