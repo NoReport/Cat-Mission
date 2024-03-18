@@ -47,6 +47,7 @@ class CatQuest(Widget):
         self.cat.velocity = Vector(0, 0)
         self.enemy.velocity = Vector(4, 4)
         Clock.schedule_interval(self.update, 1)
+        self.mousePos = (0, 0)
         with self.canvas:
             self.cat.canvas = Rectangle(source=("./src/sprites/charactorSprite/test.png"), pos=(self.cat.pos), size=(84, 150))
             self.enemy.canvas = Rectangle(pos=(self.enemy.pos), size=(322, 200),source=("./src/sprites/charactorSprite/bob_sprite.png") )
@@ -108,6 +109,7 @@ class CatQuest(Widget):
             
     
     def on_touch_down(self, touch):
+        self.mousePos = touch.pos
         self.mousePressed.add(touch.button)
     
     def on_touch_up(self, touch):
@@ -168,22 +170,48 @@ class CatQuest(Widget):
                     newPosX += step_size
             self.cat.pos = (newPosX, newPosY)
             self.cat.canvas.pos = self.cat.pos
-
-
+            
     def playerAttack(self, trickSpeed):
         if "left" in self.mousePressed:
-            if (self.enemy.pos[1] > self.cat.pos[1]-100) and (self.enemy.pos[1] < self.cat.pos[1]+100):
-                if self.cat.direct == 0:
-                    if (self.enemy.pos[0] > self.cat.pos[0]+10) and (self.enemy.pos[0] < self.cat.pos[0]+200):
+            # Calculate the direction vector from the cat to the mouse position
+            direction = Vector(*self.mousePos) - Vector(*self.cat.pos)
+
+            # Normalize the direction vector to have a magnitude of 1
+            direction = direction.normalize()
+
+            # Define the hitbox range based on the direction
+            hitbox_range = 200  # Adjust this value as needed
+
+            # Calculate the hitbox position relative to the cat's position
+            hitbox_pos = (self.cat.pos[0] + direction.x * hitbox_range, self.cat.pos[1])
+
+            # Calculate the hitbox size
+            hitbox_size = (abs(direction.x) * hitbox_range, self.cat.height)
+
+            # Draw the hitbox rectangle
+            with self.canvas:
+                Rectangle(pos=hitbox_pos, size=hitbox_size)
+
+            # Check if the enemy is within the hitbox range in the direction of the mouse
+            if self.cat.direct == 0:
+                # If the cat is facing right
+                if direction.x > 0 and abs(direction.y) < 0.2:
+                    # Check if the enemy is within the hitbox range horizontally
+                    if 0 < direction.x * (self.enemy.x - self.cat.x) < hitbox_range:
                         self.enemy.health -= 10
                         print("attacked")
-                else:
-                    if (self.enemy.pos[0] < self.cat.pos[0]-10) and (self.enemy.pos[0] > self.cat.pos[0]-200):
+            else:
+                # If the cat is facing left
+                if direction.x < 0 and abs(direction.y) < 0.2:
+                    # Check if the enemy is within the hitbox range horizontally
+                    if 0 > direction.x * (self.enemy.x - self.cat.x) > -hitbox_range:
                         self.enemy.health -= 10
                         print("attacked")
+
         if self.enemy.health <= 0:
-            print ("you win")
+            print("you win")
             self.reset_game()
+        
     
     def enemyMove(self, trickSpeed):
         newPosX = self.enemy.canvas.pos[0]
