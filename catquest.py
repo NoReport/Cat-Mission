@@ -3,6 +3,7 @@ from kivy.uix.widget import Widget
 from kivy.properties import NumericProperty, ObjectProperty
 from kivy.vector import Vector
 from kivy.clock import Clock
+import time
 from random import randint
 from kivy.graphics import Rectangle
 from kivy.core.window import Window
@@ -66,7 +67,7 @@ class CatQuest(Widget):
             print("you got damage")
             if self.cat.health <= 0:
                 print("You have been defeated by the enemy!")
-                self.reset_game()
+                self.gameLose()
 
 
         if self.cat.right > self.width:
@@ -200,7 +201,7 @@ class CatQuest(Widget):
 
         if self.enemy.health <= 0:
             print("you win")
-            self.reset_game()
+            self.gameWin()
 
     def remove_hitbox(self, dt):
         self.canvas.remove(self.hitbox)
@@ -220,6 +221,22 @@ class CatQuest(Widget):
             newPosY -= step_size
         self.enemy.pos = (newPosX, newPosY)
         self.enemy.canvas.pos = self.enemy.pos
+    
+    def gameWin(self):
+        x = randint(0,2)
+        m_source = ["./src/sounds/sfx/cat/win/win1.mp3","./src/sounds/sfx/cat/win/win2.mp3","./src/sounds/sfx/cat/win/win3.mp3"]
+        m = SoundLoader.load(m_source[x])
+        m.play()
+        time.sleep(1)
+        self.reset_game()
+    
+    def gameLose(self):
+        x = randint(0,2)
+        m_source = ["./src/sounds/sfx/cat/lose/lose1.mp3", "./src/sounds/sfx/cat/lose/lose2.mp3", "./src/sounds/sfx/cat/lose/lose3.mp3"]
+        m = SoundLoader.load(m_source[x])
+        m.play()
+        time.sleep(1)
+        self.reset_game()
 
 class CatApp(App):
     def build(self):
