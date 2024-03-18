@@ -82,6 +82,7 @@ class CatQuest(Widget):
         self.cat.pos = 0,0
         self.cat.canvas.pos = self.cat.pos
         self.cat.canvas.source = "./src/sprites/charactorSprite/test.png"
+        self.enemy.health = 100
         self.enemy.pos = (Vector(self.cat.pos)+Vector(randint(500, 800), randint(500,800)))
         self.enemy.canvas.pos = self.enemy.pos
 
@@ -118,7 +119,7 @@ class CatQuest(Widget):
         if "w" in self.keysPressed:
             newPosY += step_size
         if "s" in self.keysPressed:
-            newPosY -= step_size
+            newPosY -= step_sizesda
         if "a" in self.keysPressed:
             if self.cat.direct == 0:
                 self.cat.direct = 1
@@ -138,9 +139,14 @@ class CatQuest(Widget):
                 if self.cat.direct == 0:
                     if (self.enemy.pos[0] > self.cat.pos[0]+10) and (self.enemy.pos[0] < self.cat.pos[0]+200):
                         self.enemy.health -= 10
+                        print("attacked")
                 else:
                     if (self.enemy.pos[0] < self.cat.pos[0]-10) and (self.enemy.pos[0] > self.cat.pos[0]-200):
                         self.enemy.health -= 10
+                        print("attacked")
+        if self.enemy.health <= 0:
+            print ("you win")
+            self.reset_game()
 
 class CatApp(App):
     def build(self):
