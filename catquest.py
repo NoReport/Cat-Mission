@@ -119,7 +119,7 @@ class CatQuest(Widget):
         if "w" in self.keysPressed:
             newPosY += step_size
         if "s" in self.keysPressed:
-            newPosY -= step_sizesda
+            newPosY -= step_size
         if "a" in self.keysPressed:
             if self.cat.direct == 0:
                 self.cat.direct = 1
