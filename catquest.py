@@ -20,6 +20,7 @@ class Cat(Widget):
 
 
 class Enemy(Widget):
+    frame = 0
     health = NumericProperty(100)
     speed = 200
     def move(self):
@@ -49,6 +50,7 @@ class CatQuest(Widget):
         self.cat.velocity = Vector(0, 0)
         self.enemy.velocity = Vector(4, 4)
         Clock.schedule_interval(self.update, 1)
+        Clock.schedule_interval(self.changeFrame, 1)
         self.mousePos = (0, 0)
         with self.canvas:
             self.cat.canvas = Rectangle(source=("./src/sprites/charactorSprite/test.png"), pos=(self.cat.pos), size=(84, 150))
@@ -206,6 +208,11 @@ class CatQuest(Widget):
     def remove_hitbox(self, dt):
         self.canvas.remove(self.hitbox)
         
+    def changeFrame(self):
+        if self.enemy.frame == 0:
+            self.enemy.frame = 1
+        else:
+            self.enemy.frame = 0
     
     def enemyMove(self, trickSpeed):
         newPosX = self.enemy.canvas.pos[0]
@@ -221,6 +228,12 @@ class CatQuest(Widget):
             newPosY -= step_size
         self.enemy.pos = (newPosX, newPosY)
         self.enemy.canvas.pos = self.enemy.pos
+        if self.enemy.frame == 0:
+            self.enemy.canvas.size = (Vector(322,200))
+            self.enemy.canvas.source = ("./src/sprites/charactorSprite/bob_sprite.png")
+        else :
+            self.enemy.canvas.size = (Vector(300,200))
+            self.enemy.canvas.source = ("./src/sprites/charactorSprite/bob_sprite2.png")
     
     def gameWin(self):
         x = randint(0,2)
