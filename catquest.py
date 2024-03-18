@@ -3,8 +3,8 @@ from kivy.uix.widget import Widget
 from kivy.properties import NumericProperty, ObjectProperty
 from kivy.vector import Vector
 from kivy.clock import Clock
-import time
 from random import randint
+import time
 from kivy.graphics import Rectangle
 from kivy.core.window import Window
 from kivy.core.audio import SoundLoader
@@ -50,7 +50,7 @@ class CatQuest(Widget):
         self.cat.velocity = Vector(0, 0)
         self.enemy.velocity = Vector(4, 4)
         Clock.schedule_interval(self.update, 1)
-        Clock.schedule_interval(self.changeFrame, 1)
+        Clock.schedule_interval(self.changeFrame, 0.5)
         self.mousePos = (0, 0)
         with self.canvas:
             self.cat.canvas = Rectangle(source=("./src/sprites/charactorSprite/test.png"), pos=(self.cat.pos), size=(84, 150))
@@ -69,7 +69,7 @@ class CatQuest(Widget):
             print("you got damage")
             if self.cat.health <= 0:
                 print("You have been defeated by the enemy!")
-                self.gameLose()
+                self.reset_game()
 
 
         if self.cat.right > self.width:
@@ -183,7 +183,7 @@ class CatQuest(Widget):
             direction = Vector(*self.mousePos) - Vector(*self.cat.pos)
             direction = direction.normalize()
             hitbox_range = 200
-            hitbox_pos = (self.cat.pos[0] + direction.x * hitbox_range, self.cat.pos[1])
+            hitbox_pos = (self.cat.pos[0] + direction.x * 50, self.cat.pos[1])
             hitbox_size = (abs(direction.x) * hitbox_range, self.cat.height + 50)
             with self.canvas:
                 self.hitbox = Rectangle(pos=hitbox_pos, size=hitbox_size)
@@ -191,24 +191,24 @@ class CatQuest(Widget):
             Clock.schedule_once(self.remove_hitbox, 0.1)
             
             if self.cat.direct == 0:
-                if direction.x > 0 and abs(direction.y) < 0.2:
-                    if 0 < direction.x * (self.enemy.x - self.cat.x) < hitbox_range:
+                if self.enemy.pos[0] - hitbox_pos[0] < hitbox_size[0]:
+                    if abs(self.enemy.pos[1] - hitbox_pos[1]) < self.enemy.height:
                         self.enemy.health -= 10
                         print("attacked")
             else:
                 if direction.x < 0 and abs(direction.y) < 0.2:
-                    if 0 > direction.x * (self.enemy.x - self.cat.x) > -hitbox_range:
+                    if 0 > self.enemy.pos[0] - hitbox_pos[0] > -hitbox_size[0]:
                         self.enemy.health -= 10
                         print("attacked")
 
         if self.enemy.health <= 0:
             print("you win")
-            self.gameWin()
+            self.reset_game()
 
     def remove_hitbox(self, dt):
         self.canvas.remove(self.hitbox)
         
-    def changeFrame(self):
+    def changeFrame(self,dt):
         if self.enemy.frame == 0:
             self.enemy.frame = 1
         else:
