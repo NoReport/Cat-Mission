@@ -19,7 +19,7 @@ class Cat(Widget):
 
 class Enemy(Widget):
     health = NumericProperty(100)
-
+    speed = 200
     def move(self):
         self.pos = Vector(*self.velocity) + self.pos
 
@@ -34,6 +34,7 @@ class CatQuest(Widget):
         Clock.schedule_interval(self.playerMove,0)
         Clock.schedule_interval(self.playerAttack, 0.5)
         Clock.schedule_interval(self.playerDash, 0.2)
+        Clock.schedule_interval(self.enemyMove, 0)
         self._keyboard = Window.request_keyboard(self._on_keyboard_closed, self)
         self._keyboard.bind(on_key_down = self._on_keyboard_down)
         self._keyboard.bind(on_key_up = self._on_keyboard_up)
@@ -183,6 +184,21 @@ class CatQuest(Widget):
         if self.enemy.health <= 0:
             print ("you win")
             self.reset_game()
+    
+    def enemyMove(self, trickSpeed):
+        newPosX = self.enemy.canvas.pos[0]
+        newPosY = self.enemy.canvas.pos[1]
+        step_size = self.enemy.speed * trickSpeed
+        if newPosX < self.cat.pos[0]:
+            newPosX += step_size
+        elif newPosX > self.cat.pos[0]:
+            newPosX -= step_size
+        if newPosY < self.cat.pos[1]:
+            newPosY += step_size
+        elif newPosY > self.cat.pos[1]:
+            newPosY -= step_size
+        self.enemy.pos = (newPosX, newPosY)
+        self.enemy.canvas.pos = self.enemy.pos
 
 class CatApp(App):
     def build(self):
