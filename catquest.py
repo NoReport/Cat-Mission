@@ -33,6 +33,7 @@ class CatQuest(Widget):
         super(CatQuest, self).__init__(**kwargs)
         Clock.schedule_interval(self.playerMove,0)
         Clock.schedule_interval(self.playerAttack, 0.5)
+        Clock.schedule_interval(self.playerDash, 0.2)
         self._keyboard = Window.request_keyboard(self._on_keyboard_closed, self)
         self._keyboard.bind(on_key_down = self._on_keyboard_down)
         self._keyboard.bind(on_key_up = self._on_keyboard_up)
@@ -91,12 +92,17 @@ class CatQuest(Widget):
         self._keyboard = None
     
     def _on_keyboard_down(self, keyboard, keycode, text, modifiers):
-        self.keysPressed.add(text)
+        if text == " ":
+            self.keysPressed.add("dash")
+        else:
+            self.keysPressed.add(text)
         
     
     def _on_keyboard_up(self, keyboard, keycode):
         text = keycode[1]
-        if text in self.keysPressed:
+        if text == "spacebar":
+            self.keysPressed.remove("dash")
+        elif text in self.keysPressed:
             self.keysPressed.remove(text)
             
     
@@ -135,6 +141,33 @@ class CatQuest(Widget):
                 newPosX += step_size
         self.cat.pos = (newPosX, newPosY)
         self.cat.canvas.pos = self.cat.pos
+
+    def playerDash(self, trickSpeed):
+        if "dash" in self.keysPressed:
+            newPosX = self.cat.canvas.pos[0]
+            newPosY = self.cat.canvas.pos[1]
+            step_size = (self.cat.speed * trickSpeed) + 50
+            if "w" in self.keysPressed:
+                if newPosY+step_size <= 900:
+                    newPosY += step_size
+            if "s" in self.keysPressed:
+                if newPosY-step_size >= 0:
+                    newPosY -= step_size
+            if "a" in self.keysPressed:
+                if self.cat.direct == 0:
+                    self.cat.direct = 1
+                    self.cat.canvas.source = "./src/sprites/charactorSprite/testLeft.png"
+                if newPosX-step_size >=0 :
+                    newPosX -= step_size
+            if "d" in self.keysPressed:
+                if self.cat.direct == 1:
+                    self.cat.direct = 0
+                    self.cat.canvas.source = "./src/sprites/charactorSprite/test.png"
+                if newPosX+step_size < 1850:
+                    newPosX += step_size
+            self.cat.pos = (newPosX, newPosY)
+            self.cat.canvas.pos = self.cat.pos
+
 
     def playerAttack(self, trickSpeed):
         if "left" in self.mousePressed:
