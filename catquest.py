@@ -185,7 +185,7 @@ class CatQuest(Widget):
             with self.canvas:
                 self.hitbox = Rectangle(pos=hitbox_pos, size=hitbox_size)
 
-            Clock.schedule_once(self.remove_hitbox, 0.2)
+            Clock.schedule_once(self.remove_hitbox, 0.1)
             
             if self.cat.direct == 0:
                 if direction.x > 0 and abs(direction.y) < 0.2:
@@ -203,7 +203,6 @@ class CatQuest(Widget):
             self.reset_game()
 
     def remove_hitbox(self, dt):
-        # Remove the hitbox from the canvas
         self.canvas.remove(self.hitbox)
         
     
